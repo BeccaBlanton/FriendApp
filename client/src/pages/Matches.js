@@ -39,7 +39,7 @@ function Favorites (props){
                 <div className="card favoritesCard">
                     <div className="row">
                         {matches.map(userProfile => (
-                        <Card className="userCard" style={{ width: '21rem' }}>
+                        <Card className="userCard">
                             <UserCard
                             key={userProfile.id}
                             name={userProfile.username}
