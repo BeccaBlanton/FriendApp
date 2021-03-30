@@ -3,8 +3,7 @@
     width: 300px;
     border-style: inset;
     border-radius: 50%; 
-    position: relative;
-    left: 36%
+    align-self: center;
 }
 ul{
     list-style: none;
