@@ -17,6 +17,7 @@ import './css/Matching.css'
 function Matching (props) {
   const currentUser = AuthService.getCurrentUser();
   const [users, setusers] = useState([])
+  const [interestIds, setInterestIds] = useState([undefined])
   const [lastDirection, setLastDirection] = useState()
   const [show, setShow] = useState(false);
   const alreadyRemoved = []     
@@ -34,6 +35,27 @@ function Matching (props) {
     }
   }, [])
 
+  useEffect(() => {
+    API.getInterests()
+        .then(res => {
+            const ids = res.data.map(item => item.interest)
+            console.log(ids)
+            setInterestIds(ids)
+            })
+        .catch(err => { 
+          if (err.response.status === 401 || err.response.status === 403) { 
+            console.log(err.response.status)
+            AuthService.logout()
+            props.history.push("/login");
+            window.location.reload()
+          } else if (err.request) { 
+              console.log('error with request') 
+          } else { 
+              console.log('um, sh*ts really broken') 
+          } 
+        });
+}, [])
+
   const handleClose = () => {
     setFilterUpdate(!filterUpdate)
     setShow(false)};
@@ -49,6 +71,8 @@ function Matching (props) {
     let drinking = ["Regularly", "Socially", "Occasionally", "Never"]
     let cannabising = ["Regularly", "Socially", "Occasionally", "Never"]
     let kidding = ["Has Children", "No Children"]
+    let signing = ['Aries', 'Taurus', 'Gemini', 'Cancer', 'Leo', 'Virgo', 'Libra', 'Scorpio', 'Sagittarius', 'Capricorn', 'Aquarius', 'Pisces']
+    let interesting = interestIds
 
     if (filters.gender.length !== 0 && filters.gender.includes("No Preference" || undefined) === false){
       gendering = filters.gender
@@ -68,6 +92,15 @@ function Matching (props) {
     if (filters.children.length !== 0 && filters.children.includes("No Preference" || undefined) === false){
       kidding = filters.children
     }
+    if (filters.sign.length !== 0 && filters.sign.includes("No Preference" || undefined) === false){
+      signing = filters.sign
+    }
+    if (filters.interests.length !== 0 && filters.interests.includes("No Preference" || undefined) === false){
+      const interestPreference = filters.interests.map(item => item.interest)
+      interesting = interestPreference
+      console.log(interesting)
+    }
+
 
     const query = {
       gender: gendering,
@@ -76,12 +109,14 @@ function Matching (props) {
       smoke: smoking,
       drink: drinking,
       cannabis: cannabising,
-      children: kidding
+      children: kidding,
+      sign: signing,
+      interests: interesting
     }
 
     API.filterUsers(query)
         .then(res => {
-          
+          console.log(res.data)
           const newArray = []
           const myLocation = {
             latitude: currentLocation.lat,
@@ -114,7 +149,7 @@ function Matching (props) {
                 console.log('um, sh*ts really broken') 
           } 
         });
-  }, [filters, favorites])
+  }, [filters, favorites, interestIds])
 
   function saveFavorite(name){
     API.saveFavorites({ 

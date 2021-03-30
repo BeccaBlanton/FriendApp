@@ -98,7 +98,7 @@ const populateIntersts = [{
         "cannabis": "Never", 
         "age": "35",
         "sign":"Aries",
-        "interests": [  {"interest": "Yoga ",
+        "interests": [  {"interest": "Yoga",
                         "_id": "605384df83a432644d843ef9"}, 
                         {"interest":"Wine",
                         "_id": "605384df83a432644d843ef9"}
@@ -130,7 +130,7 @@ const populateIntersts = [{
         "cannabis": "Socially", 
         "age": "21",
         "sign":"Leo",
-        "interests": [  {"interest": "Yoga ",
+        "interests": [  {"interest": "Yoga",
                         "_id": "605384df83a432644d843ef9"}, 
                         {"interest":"Wine",
                         "_id": "605384df83a432644d843ef9"}
@@ -152,7 +152,7 @@ const populateIntersts = [{
         "cannabis": "Regularly", 
         "age": "30",
         "sign":"Aries",
-        "interests": [  {"interest": "Yoga ",
+        "interests": [  {"interest": "Yoga",
                         "_id": "605384df83a432644d843ef9"}, 
                         {"interest":"Wine",
                         "_id": "605384df83a432644d843ef9"}
@@ -174,7 +174,7 @@ const populateIntersts = [{
         "cannabis": "Socially", 
         "age": "34",
         "sign":"Gemini",
-        "interests": [  {"interest": "Yoga ",
+        "interests": [  {"interest": "Yoga",
                         "_id": "605384df83a432644d843ef9"}, 
                         {"interest":"Wine",
                         "_id": "605384df83a432644d843ef9"}
@@ -206,7 +206,7 @@ const populateIntersts = [{
         "cannabis": "Never", 
         "age": "52",
         "sign":"Aries",
-        "interests": [  {"interest": "Yoga ",
+        "interests": [  {"interest": "Yoga",
                         "_id": "605384df83a432644d843ef9"}, 
                         {"interest":"Wine",
                         "_id": "605384df83a432644d843ef9"}
@@ -228,7 +228,7 @@ const populateIntersts = [{
         "cannabis": "Never", 
         "age": "52",
         "sign":"Aries",
-        "interests": [  {"interest": "Yoga ",
+        "interests": [  {"interest": "Yoga",
                         "_id": "605384df83a432644d843ef9"}, 
                         {"interest":"Wine",
                         "_id": "605384df83a432644d843ef9"}
@@ -250,7 +250,7 @@ const populateIntersts = [{
         "cannabis": "Never", 
         "age": "27",
         "sign":"Aries",
-        "interests": [  {"interest": "Hiking ",
+        "interests": [  {"interest": "Hiking",
                         "_id": "605384df83a432644d843ef9"}, 
                         {"interest":"Books",
                         "_id": "605384df83a432644d843ef9"}
@@ -272,7 +272,7 @@ const populateIntersts = [{
         "cannabis": "Occasionally", 
         "age": "44",
         "sign":"Libra",
-        "interests": [  {"interest": "Hiking ",
+        "interests": [  {"interest": "Hiking",
                         "_id": "605384df83a432644d843ef9"}, 
                         {"interest":"Books",
                         "_id": "605384df83a432644d843ef9"}

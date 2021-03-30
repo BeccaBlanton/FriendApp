@@ -27,7 +27,9 @@ const getUserProfile = () => {
         children: "",
         drink: "",
         smoke: "",
-        cannabis: ""
+        cannabis: "",
+        sign: "",
+        interests: ""
     })
 
     const [filterUpdate, setFilterUpdate] = useState(true)
@@ -47,8 +49,11 @@ const getUserProfile = () => {
                     children: filt.children,
                     drink: filt.drink,
                     smoke: filt.smoke,
-                    cannabis: filt.cannabis
+                    cannabis: filt.cannabis,
+                    sign: filt.sign,
+                    interests: filt.interests
                 }
+                console.log(filterObj)
                 setProfile(res.data[0])
                 setFilters(filterObj)
                 })
