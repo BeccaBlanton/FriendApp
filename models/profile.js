@@ -66,7 +66,14 @@ const profileSchema = new Schema({
             children: [{type: String}],
             drink: [{type: String}],
             smoke: [{type: String}],
-            cannabis: [{type: String}]
+            cannabis: [{type: String}],
+            sign: [{type: String}],
+            interests: [
+                {
+                  interest: {type: String},
+                  _id: {type: String}
+                }
+            ]
         }
     ],
     favorites: [

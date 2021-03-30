@@ -18,7 +18,7 @@ import './Filter.css'
 function Filter(props){
   const currentUser = AuthService.getCurrentUser();
   const [ageRange, setAgeRange] = React.useState([18, 65]);
-  const [distance, setDistance] = React.useState();
+  const [distance, setDistance] = React.useState(15);
   const [interestList, setInterestList] = useState([]);
   const [filterGender, setFilterGender] = useState([]);
   const [filterPolitics, setFilterPolitics] = useState([]);
@@ -27,6 +27,7 @@ function Filter(props){
   const [filterSmoke, setFilterSmoke] = useState([]);
   const [filterCannabis, setFilterCannabis] = useState([]);
   const [filterSign, setFilterSign] = useState([]);
+  const checkboxArray = document.getElementsByClassName('interests')
   
   let newState = []
   
@@ -98,37 +99,50 @@ function Filter(props){
       API.getInterests()
           .then(res => {
               setInterestList(res.data)
-              })
+          })
           .catch(err => { 
               if (err.response) { 
               console.log('error with response')
               } else if (err.request) { 
                   console.log('error with request') 
               } else { 
-                  console.log('um, sh*ts really broken') 
-              } });
+                  console.log('something is not quite right') 
+              } 
+          });
   }, [])
   
   function handleFormSubmit(e){
       e.preventDefault()
-        console.log(filterGender)
-         const object = { filterBy: [{
-              distance: distance,
-              gender: filterGender[0],
-              politics: filterPolitics[0],
-              ageRange: ageRange,
-              children: filterChildren[0], 
-              drink: filterDrink[0], 
-              smoke: filterSmoke[0], 
-              cannabis: filterCannabis[0]
-          }]
+      const interestPreference = []
+
+      for( var i = 0; i < checkboxArray.length; i ++){
+          if (checkboxArray[i].children[0].checked === true){
+              
+              const choices = {
+                  interest: checkboxArray[i].children[0].id,
+                  _id: checkboxArray[i].children[0].dataset.id
+              }
+              interestPreference.push(choices)
           }
-          console.log(object)
+      }
+
+      const object = { filterBy: [{
+          distance: distance,
+          gender: filterGender[0],
+          politics: filterPolitics[0],
+          ageRange: ageRange,
+          children: filterChildren[0], 
+          drink: filterDrink[0], 
+          smoke: filterSmoke[0], 
+          cannabis: filterCannabis[0],
+          sign: filterSign[0],
+          interests: interestPreference
+      }]
+      }
+      
   
       API.editProfileByName(object, currentUser.username)
       .then(res => {
-          // props.history.push("/profile");
-          // window.location.reload()
           })
       .catch(err => { 
           if (err.response) { 
