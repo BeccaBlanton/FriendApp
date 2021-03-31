@@ -11,6 +11,7 @@ import ButtonGroup from 'react-bootstrap/esm/ButtonGroup';
 import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
 import Filter from '../components/Filter'
+import Toast from 'react-bootstrap/Toast'
 
 import './css/Matching.css'
 
@@ -19,12 +20,14 @@ function Matching () {
   const [users, setusers] = useState([])
   const [lastDirection, setLastDirection] = useState()
   const [show, setShow] = useState(false);
+  const [matchToast, setMatchToast] = useState(false);
   const alreadyRemoved = []     
   let usersState = users
   
   const { filters, filterUpdate, setFilterUpdate } = getUserProfile()
   const { currentLocation } = Geolocation()
   const { favorites } = getFavorites()
+  const toggleMatchToast = () => setMatchToast(!matchToast)
 
   const handleClose = () => {
     setFilterUpdate(!filterUpdate)
@@ -131,7 +134,7 @@ function Matching () {
         console.log(array)
         
         if(array.includes(currentUser.username)){
-          alert("It's a match!")
+          toggleMatchToast()
           API.doubleEntry([
             { currentUser: currentUser.username,
               match: faveName
@@ -188,12 +191,23 @@ function Matching () {
   return (
     
     <div>
+      <Toast show={matchToast} onClose={toggleMatchToast}>
+          <Toast.Header>
+            <img
+              src="holder.js/20x20?text=%20"
+              className="rounded mr-2"
+              alt=""
+            />
+            <strong className="mr-auto">BFFL Match</strong>
+            <small>1 min ago</small>
+          </Toast.Header>
+          <Toast.Body>Woohoo, you've matched!</Toast.Body>
+        </Toast>
       {users.length === 0 ? 
       <div><h1 className="Header">There aren't any users who match your preferences. Keep looking!</h1>
      <Button variant="info" onClick={handleShow} style={{position: 'relative',left: '55%',fontSize: 'x-large'}}>
         Filter <i className="fas fa-filter"></i>
       </Button>
-
       <Modal
         show={show}
         onHide={handleClose}
