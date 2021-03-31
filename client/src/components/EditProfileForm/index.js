@@ -102,6 +102,7 @@ function handleFormSubmit(event) {
                 <Badge variant="info"
                         style={{width: 'fit-content', fontSize: 'inherit'}}>Age:{age}</Badge>
                 <DropdownButton
+                
                 variant="info"
                 alignRight
                 title="Age"

@@ -31,3 +31,7 @@ input[type=checkbox]:focus{
     font-size: larger;
     font-weight: bolder;
 }
+.dropdown-menu.show {
+    height: 300px;
+    overflow: scroll;
+}
