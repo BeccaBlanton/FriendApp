@@ -22,6 +22,14 @@ const [skin, setSkin] = useState();
 const [clothesChoice, setClothesChoice] = useState();
 const [url, setUrl] = useState();
 
+    useEffect(() => {
+        
+        if(currentUser === null){
+        props.history.push("/login");
+        window.location.reload()
+        }
+    }, [])
+
     useEffect(()=>{
         setUrl(`https://avatars.dicebear.com/api/avataaars/${ base ? `${base}` : 'example'}.svg?${top ? `top[]=${top}` : ''}&${ hairColor ? `hairColor[]=${hairColor}` : ''}&${ eyes ? `eyes[]=${eyes}` : ''}&${ eyebrow ? `eyebrow[]=${eyebrow}` : ''}&${ mouth ? `mouth[]=${mouth}` : ''}&${ skin ? `skin[]=${skin}` : ''}&${ clothesChoice ? `clothesColor[]=${clothesChoice}` : ''}`)
         }, 

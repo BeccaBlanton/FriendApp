@@ -34,10 +34,11 @@ const getUserProfile = () => {
 
 
         useEffect (() => {
-        API.findProfileByName(currentUser.username)
-        .then((res) => {
-        console.log(res.data[0])
-        const filt = res.data[0].filterBy[0]
+            if(currentUser){
+                API.findProfileByName(currentUser.username)
+                .then((res) => {
+                
+                const filt = res.data[0].filterBy[0]
                 const filterObj = {
                     distance: filt.distance,
                     gender: filt.gender,
@@ -48,17 +49,18 @@ const getUserProfile = () => {
                     smoke: filt.smoke,
                     cannabis: filt.cannabis
                 }
-        setProfile(res.data[0])
-        setFilters(filterObj)
-        })
-        .catch(err => { 
-        if (err.response) { 
-        console.log('error with response')
-        } else if (err.request) { 
-        console.log('error with request') 
-        } else { 
-        console.log('um, sh*ts really broken') 
-        } });
+                setProfile(res.data[0])
+                setFilters(filterObj)
+                })
+                .catch(err => { 
+                if (err.response) { 
+                console.log('error with response')
+                } else if (err.request) { 
+                console.log('error with request') 
+                } else { 
+                console.log('something is not quite right') 
+                } });
+            }
         }, [filterUpdate])
 
     return {

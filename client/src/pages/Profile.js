@@ -5,7 +5,7 @@ import ProfileModal from '../components/ProfileModal';
 import Badge from 'react-bootstrap/Badge'
 import './css/Profile.css'
 
-const Profile = () => {
+const Profile = (props) => {
   const currentUser = AuthService.getCurrentUser();
   const [profile, setProfile] = useState({
                                   avatar: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fnautiluslive.org%2Fvideo%2F2015%2F08%2F21%2Fshy-dumbo-octopus-hides-inside-its-own-tentacles&psig=AOvVaw0jo9F8ir0R5bYDQ0K3Z_Z0&ust=1616554094045000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCIjn37izxe8CFQAAAAAdAAAAABAD",
@@ -22,26 +22,36 @@ const Profile = () => {
                                   interests: []
                                 })
   
-  
+  useEffect(() => {
+      if(currentUser === null){
+        props.history.push("/login");
+        window.location.reload()
+      }
+  }, [])  
 
   useEffect (() => {
       API.findProfileByName(currentUser.username)
           .then((res) => {
-              console.log(res.data[0])
               setProfile(res.data[0])
           })
           .catch(err => { 
-          if (err.response) { 
-          console.log('error with response')
-          } else if (err.request) { 
-              console.log('error with request') 
-          } else { 
-              console.log('um, sh*ts really broken') 
-          } });
+            if (err.response.status === 401 || err.response.status === 403) { 
+              console.log(err.response.status)
+              AuthService.logout()
+              props.history.push("/login");
+              window.location.reload()
+            } else if (err.request) { 
+                console.log('error with request') 
+            } else { 
+                console.log('um, sh*ts really broken') 
+            } 
+          });
   }, [])
   
 
     return(
+      <>
+      {currentUser && (
       <main className="profile">
         <h1 className='Header'>
           <strong>{currentUser.username}'s</strong> Profile
@@ -78,6 +88,8 @@ const Profile = () => {
         </p>
       </div>
     </main>
+    )}
+    </>
     )
 }
 

@@ -18,24 +18,28 @@ const Geolocation = () => {
                 lng: location.coords.longitude,
             }
         });
-        API.editProfileByName({
-            location: {
-            latitude: location.coords.latitude,
-            longitude: location.coords.longitude,
-            }
-        }, currentUser.username, 
-        { user: {
-            accessToken: currentUser.accessToken
-        }})
-        .then()
-        .catch(err => { 
-            if (err.response) { 
-            console.log('error with response')
-            } else if (err.request) { 
-                console.log('error with request') 
-            } else { 
-                console.log('um, sh*ts really broken') 
-            } });
+
+        if(currentUser){
+            API.editProfileByName({
+                location: {
+                latitude: location.coords.latitude,
+                longitude: location.coords.longitude,
+                }
+            }, currentUser.username, 
+            { user: {
+                accessToken: currentUser.accessToken
+            }})
+            .then()
+            .catch(err => { 
+                if (err.response) { 
+                console.log('error with response')
+                } else if (err.request) { 
+                    console.log('error with request') 
+                } else { 
+                    console.log('something is not quite right') 
+                } 
+            });
+        }
     };
     
     const onError = error => {

@@ -15,7 +15,7 @@ import Toast from 'react-bootstrap/Toast'
 
 import './css/Matching.css'
 
-function Matching () {
+function Matching (props) {
   const currentUser = AuthService.getCurrentUser();
   const [users, setusers] = useState([])
   const [lastDirection, setLastDirection] = useState()
@@ -28,6 +28,14 @@ function Matching () {
   const { currentLocation } = Geolocation()
   const { favorites } = getFavorites()
   const toggleMatchToast = () => setMatchToast(!matchToast)
+
+  useEffect(() => {
+    
+    if(currentUser === null){
+      props.history.push("/login");
+      window.location.reload()
+    }
+  }, [])
 
   const handleClose = () => {
     setFilterUpdate(!filterUpdate)
@@ -95,19 +103,22 @@ function Matching () {
               newArray.push(res.data[i])
             }
           }
-            
-            setusers(newArray)
 
-            })
+          setusers(newArray)
+        })
+
         .catch(err => { 
-            if (err.response) { 
-            console.log('error with response')
-            } else if (err.request) { 
+          if (err.response.status === 401 || err.response.status === 403) { 
+            console.log(err.response.status)
+            AuthService.logout()
+            props.history.push("/login");
+            window.location.reload()
+          } else if (err.request) { 
                 console.log('error with request') 
-            } else { 
+          } else { 
                 console.log('um, sh*ts really broken') 
-            } });
-    
+          } 
+        });
   }, [filters, favorites])
 
   function saveFavorite(name){

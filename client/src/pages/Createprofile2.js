@@ -13,90 +13,101 @@ import Badge from 'react-bootstrap/Badge'
 import Form from 'react-bootstrap/Form'
 
 function Createprofile2 (props){
-const currentUser = AuthService.getCurrentUser();
-const [gender, setGender] = useState();
-const [politics, setPolitics] = useState();
-const [children, setChildren] = useState();
-const [drink, setDrink] = useState();
-const [smoke, setSmoke] = useState();
-const [cannabis, setCannabis] = useState();
-const [age, setAge] = useState();
-const [sign, setSign] = useState();
-const [interestList, setInterestList] = useState([]);
-const checkboxArray = document.getElementsByClassName('interests')
+    const currentUser = AuthService.getCurrentUser();
+    const [gender, setGender] = useState();
+    const [politics, setPolitics] = useState();
+    const [children, setChildren] = useState();
+    const [drink, setDrink] = useState();
+    const [smoke, setSmoke] = useState();
+    const [cannabis, setCannabis] = useState();
+    const [age, setAge] = useState();
+    const [sign, setSign] = useState();
+    const [interestList, setInterestList] = useState([]);
+    const checkboxArray = document.getElementsByClassName('interests')
 
 
 
-const handleGenderChange = (val) => setGender(val);
-const handlePoliticsChange = (val) => setPolitics(val);
-const handleChildrenChange = (val) => setChildren(val);
-const handleDrinkChange = (val) => setDrink(val);
-const handleSmokeChange = (val) => setSmoke(val);
-const handleCannabisChange = (val) => setCannabis(val);
-const handleAgeChange = (val) => setAge(val);
-const handleSignChange = (val) => setSign(val);
+    const handleGenderChange = (val) => setGender(val);
+    const handlePoliticsChange = (val) => setPolitics(val);
+    const handleChildrenChange = (val) => setChildren(val);
+    const handleDrinkChange = (val) => setDrink(val);
+    const handleSmokeChange = (val) => setSmoke(val);
+    const handleCannabisChange = (val) => setCannabis(val);
+    const handleAgeChange = (val) => setAge(val);
+    const handleSignChange = (val) => setSign(val);
 
-useEffect(() => {
-    
-    API.getInterests()
-        .then(res => {
-            setInterestList(res.data)
-            })
-        .catch(err => { 
-            if (err.response) { 
-            console.log('error with response')
-            } else if (err.request) { 
-                console.log('error with request') 
-            } else { 
-                console.log('um, sh*ts really broken') 
-            } });
-    
-}, [])
-
-function handleFormSubmit(event) {
-    event.preventDefault();
-    const myinterests = []
-
-    for( var i = 0; i < checkboxArray.length; i ++){
-        if (checkboxArray[i].children[0].checked === true){
-            
-            const object = {
-                interest: checkboxArray[i].children[0].id,
-                _id: checkboxArray[i].children[0].dataset.id
-            }
-            myinterests.push(object)
+    useEffect(() => {
+        
+        if(currentUser === null){
+        props.history.push("/login");
+        window.location.reload()
         }
+    }, [])
+
+    useEffect(() => {
+        
+        API.getInterests()
+            .then(res => {
+                setInterestList(res.data)
+                })
+            .catch(err => { 
+                if (err.response.status === 401 || err.response.status === 403) { 
+                    console.log(err.response.status)
+                    AuthService.logout()
+                    props.history.push("/login");
+                    window.location.reload()
+                } else if (err.request) { 
+                    console.log('error with request') 
+                } else { 
+                    console.log('um, sh*ts really broken') 
+                } 
+            });
+    }, [])
+
+    function handleFormSubmit(event) {
+        event.preventDefault();
+        const myinterests = []
+
+        for( var i = 0; i < checkboxArray.length; i ++){
+            if (checkboxArray[i].children[0].checked === true){
+                
+                const object = {
+                    interest: checkboxArray[i].children[0].id,
+                    _id: checkboxArray[i].children[0].dataset.id
+                }
+                myinterests.push(object)
+            }
+        }
+        
+        const userProfile = {
+            gender: gender, 
+            politics: politics, 
+            children: children, 
+            drink: drink, 
+            smoke: smoke, 
+            cannabis: cannabis, 
+            age: age,
+            sign: sign,
+            interests: myinterests
+            }
+        
+            API.editProfileByName(userProfile, currentUser.username)
+            .then(res => {
+                console.log(res.data)
+                props.history.push("/createprofile3");
+                window.location.reload()
+                })
+            .catch(err => { 
+                if (err.response) { 
+                console.log('error with response')
+                } else if (err.request) { 
+                    console.log('error with request') 
+                } else { 
+                    console.log('um, sh*ts really broken') 
+                } 
+            });
     }
     
-    const userProfile = {
-        gender: gender, 
-        politics: politics, 
-        children: children, 
-        drink: drink, 
-        smoke: smoke, 
-        cannabis: cannabis, 
-        age: age,
-        sign: sign,
-        interests: myinterests
-        }
-       
-        API.editProfileByName(userProfile, currentUser.username)
-        .then(res => {
-            console.log(res.data)
-            props.history.push("/createprofile3");
-            window.location.reload()
-            })
-        .catch(err => { 
-            if (err.response) { 
-              console.log('error with response')
-            } else if (err.request) { 
-                console.log('error with request') 
-            } else { 
-                console.log('um, sh*ts really broken') 
-            } });
- 
-
-}
     return(
     <main>
         <h1 className="Header">Now let's find out more about you:</h1>

@@ -7,20 +7,22 @@ const getFavorites = () => {
     const [favorites, setFavorites] = useState([currentUser.username])
     
     useEffect(() => {
-        API.getFavoritesByName(currentUser.username, { user: {
-            accessToken: currentUser.accessToken
-        }})
+
+        if(currentUser){
+            API.getFavoritesByName(currentUser.username, { user: {
+                accessToken: currentUser.accessToken
+            }})
             .then(item => {
                 let array = [currentUser.username]
                 const results = item.data
                 results.forEach((res) => array.push(res.faveUser))
                 setFavorites(array)
             })
+        }
     }, [])
 
     return {
-        favorites,
-        setFavorites
+        favorites
     }
 }
 

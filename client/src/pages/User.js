@@ -17,6 +17,14 @@ const currentUser = (props) => {
             window.location.reload()
   }
 
+  useEffect(() => {
+    
+    if(currentUser === null){
+      props.history.push("/login");
+      window.location.reload()
+    }
+  }, [])
+
   const handleClose = () => {
     setShow(false)};
   const handleShow = () => setShow(true);
@@ -27,6 +35,12 @@ const currentUser = (props) => {
         setContent(response.data);
       },
       (error) => {
+        if (error.response.status === 401 || error.response.status === 403) { 
+          console.log(error.response.status)
+          AuthService.logout()
+          props.history.push("/login");
+          window.location.reload()
+        }
         const _content =
           (error.response &&
             error.response.data &&
@@ -50,6 +64,8 @@ const currentUser = (props) => {
   }
 
   return (
+    <>
+    {currentUser && (
     <main>
       <h1 className='Header'>Your Account:</h1>
     <div className="container">
@@ -114,6 +130,8 @@ const currentUser = (props) => {
       </div>
     </div>
     </main>
+    )}
+    </>
   );
 };
 

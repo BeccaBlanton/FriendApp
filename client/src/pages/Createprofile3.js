@@ -16,136 +16,148 @@ import Form from 'react-bootstrap/Form'
 
 
 function Createprofile3 (props){
-const currentUser = AuthService.getCurrentUser();
-const [ageRange, setAgeRange] = React.useState([18, 65]);
-const [distance, setDistance] = React.useState();
-const [interestList, setInterestList] = useState([]);
-const [filterGender, setFilterGender] = useState([]);
-const [filterPolitics, setFilterPolitics] = useState([]);
-const [filterChildren, setFilterChildren] = useState([]);
-const [filterDrink, setFilterDrink] = useState([]);
-const [filterSmoke, setFilterSmoke] = useState([]);
-const [filterCannabis, setFilterCannabis] = useState([]);
-const [filterSign, setFilterSign] = useState([]);
+  const currentUser = AuthService.getCurrentUser();
+  const [ageRange, setAgeRange] = React.useState([18, 65]);
+  const [distance, setDistance] = React.useState();
+  const [interestList, setInterestList] = useState([]);
+  const [filterGender, setFilterGender] = useState([]);
+  const [filterPolitics, setFilterPolitics] = useState([]);
+  const [filterChildren, setFilterChildren] = useState([]);
+  const [filterDrink, setFilterDrink] = useState([]);
+  const [filterSmoke, setFilterSmoke] = useState([]);
+  const [filterCannabis, setFilterCannabis] = useState([]);
+  const [filterSign, setFilterSign] = useState([]);
 
-let newState = []
+  let newState = []
 
-const handleGenderChange = (newVal) => {
-    newState = [...filterGender, newVal]
-    if(newState.length > 1){
-      newState.shift()
+  useEffect(() => {
+          
+    if(currentUser === null){
+    props.history.push("/login");
+    window.location.reload()
     }
-    setFilterGender(newState)
-}
+  }, [])
 
-const handlePoliticsChange = (newVal) => {
-    newState = [...filterPolitics, newVal]
-    if(newState.length > 1){
-      newState.shift()
-    }
-    setFilterPolitics(newState)
-}
+  const handleGenderChange = (newVal) => {
+      newState = [...filterGender, newVal]
+      if(newState.length > 1){
+        newState.shift()
+      }
+      setFilterGender(newState)
+  }
 
-const handleChildrenChange = (newVal) => {
-    newState = [...filterChildren, newVal]
-    if(newState.length > 1){
-      newState.shift()
-    }
-    setFilterChildren(newState)
-}
+  const handlePoliticsChange = (newVal) => {
+      newState = [...filterPolitics, newVal]
+      if(newState.length > 1){
+        newState.shift()
+      }
+      setFilterPolitics(newState)
+  }
 
-const handleDrinkChange = (newVal) => {
-    newState = [...filterDrink, newVal]
-    if(newState.length > 1){
-      newState.shift()
-    }
-    setFilterDrink(newState)
-}
+  const handleChildrenChange = (newVal) => {
+      newState = [...filterChildren, newVal]
+      if(newState.length > 1){
+        newState.shift()
+      }
+      setFilterChildren(newState)
+  }
 
-const handleSmokeChange = (newVal) => {
-    newState = [...filterSmoke, newVal]
-    if(newState.length > 1){
-      newState.shift()
-    }
-    setFilterSmoke(newState)
-}
+  const handleDrinkChange = (newVal) => {
+      newState = [...filterDrink, newVal]
+      if(newState.length > 1){
+        newState.shift()
+      }
+      setFilterDrink(newState)
+  }
 
-const handleCannabisChange = (newVal) => {
-    newState = [...filterCannabis, newVal]
-    if(newState.length > 1){
-      newState.shift()
-    }
-    setFilterCannabis(newState)
-}
+  const handleSmokeChange = (newVal) => {
+      newState = [...filterSmoke, newVal]
+      if(newState.length > 1){
+        newState.shift()
+      }
+      setFilterSmoke(newState)
+  }
 
-const handleSignChange = (newVal) => {
-    newState = [...filterSign, newVal]
-    if(newState.length > 1){
-      newState.shift()
-    }
-    setFilterSign(newState)
-}
+  const handleCannabisChange = (newVal) => {
+      newState = [...filterCannabis, newVal]
+      if(newState.length > 1){
+        newState.shift()
+      }
+      setFilterCannabis(newState)
+  }
 
-const handleAgeChange = (event, newValue) => {
-    setAgeRange(newValue);
-  };
+  const handleSignChange = (newVal) => {
+      newState = [...filterSign, newVal]
+      if(newState.length > 1){
+        newState.shift()
+      }
+      setFilterSign(newState)
+  }
 
-const handleDistanceChange = (event, newValue) => {
-      setDistance(newValue);
+  const handleAgeChange = (event, newValue) => {
+      setAgeRange(newValue);
     };
 
-useEffect(() => {
-    API.getInterests()
-        .then(res => {
-            setInterestList(res.data)
-            })
-        .catch(err => { 
-            if (err.response) { 
-            console.log('error with response')
+  const handleDistanceChange = (event, newValue) => {
+        setDistance(newValue);
+      };
+
+  useEffect(() => {
+      API.getInterests()
+          .then(res => {
+              setInterestList(res.data)
+              })
+          .catch(err => { 
+            if (err.response.status === 401 || err.response.status === 403) { 
+              console.log(err.response.status)
+              AuthService.logout()
+              props.history.push("/login");
+              window.location.reload()
             } else if (err.request) { 
                 console.log('error with request') 
             } else { 
                 console.log('um, sh*ts really broken') 
-            } });
-}, [])
+            } 
+          });
+  }, [])
 
-function handleFormSubmit(e){
-    e.preventDefault()
-      console.log(filterGender)
-       const object = { filterBy: [{
-            distance: distance,
-            gender: filterGender[0],
-            politics: filterPolitics[0],
-            ageRange: ageRange,
-            children: filterChildren[0], 
-            drink: filterDrink[0], 
-            smoke: filterSmoke[0], 
-            cannabis: filterCannabis[0]
-        }]
-        }
-        console.log(object)
+  function handleFormSubmit(e){
+      e.preventDefault()
+        console.log(filterGender)
+        const object = { filterBy: [{
+              distance: distance,
+              gender: filterGender[0],
+              politics: filterPolitics[0],
+              ageRange: ageRange,
+              children: filterChildren[0], 
+              drink: filterDrink[0], 
+              smoke: filterSmoke[0], 
+              cannabis: filterCannabis[0]
+          }]
+          }
+          console.log(object)
 
-    API.editProfileByName(object, currentUser.username)
-    .then(res => {
-        console.log(res.data)
-        props.history.push("/profile");
-        window.location.reload()
-        })
-    .catch(err => { 
-        if (err.response) { 
-          console.log('error with response')
-        } else if (err.request) { 
-            console.log('error with request') 
-        } else { 
-            console.log('um, sh*ts really broken') 
-        } 
-      });
-}
+      API.editProfileByName(object, currentUser.username)
+      .then(res => {
+          console.log(res.data)
+          props.history.push("/profile");
+          window.location.reload()
+          })
+      .catch(err => { 
+          if (err.response) { 
+            console.log('error with response')
+          } else if (err.request) { 
+              console.log('error with request') 
+          } else { 
+              console.log('um, sh*ts really broken') 
+          } 
+        });
+  }
 
-const useStyles = makeStyles({
-    root: {
-      width: 300,
-    },
+  const useStyles = makeStyles({
+      root: {
+        width: 300,
+      },
   });
 
   const classes = useStyles();
@@ -155,58 +167,58 @@ const useStyles = makeStyles({
   }
 
 
-    const marks = [
-        {
-          value: 20,
-          label: '20',
+  const marks = [
+      {
+        value: 20,
+        label: '20',
+      },
+      {
+        value: 30,
+        label: '30',
+      },
+      {
+        value: 40,
+        label: '40',
+      },
+      {
+        value: 50,
+        label: '50',
+      },
+      {
+            value: 60,
+          label: '60',
         },
-        {
-          value: 30,
-          label: '30',
-        },
-        {
-          value: 40,
-          label: '40',
-        },
-        {
-          value: 50,
-          label: '50',
-        },
-        {
-             value: 60,
-            label: '60',
-          },
-      ];
+    ];
 
-      const PrettoSlider = withStyles({
-        root: {
-          color: '#17a2b8',
-          height: 8,
+    const PrettoSlider = withStyles({
+      root: {
+        color: '#17a2b8',
+        height: 8,
+      },
+      thumb: {
+        height: 24,
+        width: 24,
+        backgroundColor: '#fff',
+        border: '2px solid currentColor',
+        marginTop: -8,
+        marginLeft: -12,
+        '&:focus, &:hover, &$active': {
+          boxShadow: 'inherit',
         },
-        thumb: {
-          height: 24,
-          width: 24,
-          backgroundColor: '#fff',
-          border: '2px solid currentColor',
-          marginTop: -8,
-          marginLeft: -12,
-          '&:focus, &:hover, &$active': {
-            boxShadow: 'inherit',
-          },
-        },
-        active: {},
-        valueLabel: {
-          left: 'calc(-50% + 4px)',
-        },
-        track: {
-          height: 8,
-          borderRadius: 4,
-        },
-        rail: {
-          height: 8,
-          borderRadius: 4,
-        },
-      })(Slider);
+      },
+      active: {},
+      valueLabel: {
+        left: 'calc(-50% + 4px)',
+      },
+      track: {
+        height: 8,
+        borderRadius: 4,
+      },
+      rail: {
+        height: 8,
+        borderRadius: 4,
+      },
+    })(Slider);
       
 return (
 <main>
